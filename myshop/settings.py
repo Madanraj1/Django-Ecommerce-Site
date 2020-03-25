@@ -50,6 +50,11 @@ INSTALLED_APPS = [
     'parler',
     'localflavor',
 
+    #database
+    'django.contrib.postgres',
+
+   
+
 ]
 
 MIDDLEWARE = [
@@ -91,8 +96,11 @@ WSGI_APPLICATION = 'myshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'e-commerce',
+        'USER': 'postgres',
+        'PASSWORD': 'waterballs',
+        'HOST': 'localhost'
     }
 }
 
@@ -189,3 +197,4 @@ PARLER_LANGUAGES = {
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB   = 1
+

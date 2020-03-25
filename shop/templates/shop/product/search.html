@@ -1,0 +1,36 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %} Search {% endblock %}
+
+{% block content %}
+
+<h1> Search for your product </h1>
+     <form action="." method="get">
+         {{ form.as_p }} <input type="submit" value="Search Product">
+</form>
+
+
+{% if query %}
+    <h1> Search result of "{{ query }} " </h1>
+
+    <h3> 
+        {% with results.count as total_results %}
+            Found {{ total_results }} results {{ total_results|pluralize }}
+        {% endwith  %}
+     </h3>
+
+    <div id="main" class="product-list">
+    {% for product in results  %}
+        <div class="item">
+                <a href="{{ product.get_absolute_url }}">
+                  <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" height="250">
+                </a>
+                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a><br>
+                &#8377; {{ product.price }}
+        </div>
+    {% empty %}
+        <p> There is no product related to {{ query }} </p>
+     {% endfor %}
+    {% endif %}
+    </div>
+{% endblock %}

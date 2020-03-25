@@ -2,6 +2,10 @@ from django.shortcuts import render, get_object_or_404
 from .models import Category, Product 
 from cart.forms import CartAddProductForm
 from . recommender import Recommender 
+from django.contrib.postgres.search import SearchVector 
+from .forms import SearchForm 
+
+
 
 def product_list(request, category_slug=None):
 
@@ -34,3 +38,23 @@ def product_detail(request, id,slug):
     return render(request, 'shop/product/detail.html', {'product':product, 
                             'cart_product_form':cart_product_form,
                             'recommended_products':recommended_products})
+
+
+
+def product_search(request):
+
+    form = SearchForm() 
+    query = None 
+    results = [] 
+    if 'query' in request.GET:
+        form = SearchForm(request.GET) 
+        if form.is_valid():
+            query = form.cleaned_data['query'] 
+            results = Product.objects.annotate(
+                search=SearchVector('translations__name'),).filter(search=query) 
+    context = {
+            'form':form,
+            'query':query,
+            'results':results
+        }
+    return render(request, 'shop/product/search.html',context )
